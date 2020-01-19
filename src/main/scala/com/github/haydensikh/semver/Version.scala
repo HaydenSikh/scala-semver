@@ -28,7 +28,7 @@ case class Version(
 }
 
 object Version {
-  private val preReleaseTagOrdering: Ordering[Version] = { (lhs, rhs) =>
+  private[semver] val preReleaseTagOrdering: Ordering[Version] = { (lhs, rhs) =>
     (lhs.preReleaseTag, rhs.preReleaseTag) match {
       case (None, None) => 0
       case (Some(_), None) => -1
@@ -37,9 +37,7 @@ object Version {
     }
   }
 
-  implicit val ordering: Ordering[Version] =
-    Ordering.by[Version, Int](_.major)
-      .orElse(Ordering.by(_.minor))
-      .orElse(Ordering.by(_.patch))
-      .orElse(preReleaseTagOrdering)
+  // NB: ordering is extracted out since the Ordering#orElse() function was not
+  // added until 2.13.  Pull code back in once support for 2.12 is dropped
+  implicit val ordering: Ordering[Version] = CrossVersionBridge.versionOrdering
 }

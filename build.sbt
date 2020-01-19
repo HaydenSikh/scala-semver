@@ -1,8 +1,13 @@
-name := "semver"
-
+name := "scala-semver"
 organization := "com.github.haydensikh"
 
-scalaVersion := "2.13.1"
+val scala2_12 = "2.12.10"
+val scala2_13 = "2.13.1"
+val supportedScalaVersions = Seq(scala2_12, scala2_13)
+
+scalaVersion := scala2_13
+
+crossScalaVersions += scala2_12
 
 libraryDependencies ++= {
   import DependencyVersions._
